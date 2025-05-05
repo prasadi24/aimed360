@@ -1,0 +1,102 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Elements -->
+  <circle cx="400" cy="300" r="250" fill="#EBF5FF" opacity="0.5"/>
+  <circle cx="250" cy="200" r="120" fill="#E6F7F5" opacity="0.7"/>
+  <circle cx="550" cy="400" r="150" fill="#E6F7F5" opacity="0.4"/>
+  
+  <!-- Medical Record/Form -->
+  <g transform="translate(300, 100)">
+    <!-- Main Form -->
+    <rect x="0" y="0" width="200" height="300" rx="10" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+    <!-- Form Header -->
+    <rect x="0" y="0" width="200" height="40" rx="10" fill="#3B82F6"/>
+    <rect x="0" y="30" width="200" height="10" fill="#3B82F6"/>
+    <!-- Form Title -->
+    <text x="20" y="25" font-family="Arial" font-size="16" font-weight="bold" fill="white">Patient Registration</text>
+    
+    <!-- Form Fields -->
+    <rect x="20" y="60" width="160" height="30" rx="5" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <text x="25" y="80" font-family="Arial" font-size="12" fill="#9CA3AF">Full Name</text>
+    
+    <rect x="20" y="100" width="160" height="30" rx="5" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <text x="25" y="120" font-family="Arial" font-size="12" fill="#9CA3AF">Email Address</text>
+    
+    <rect x="20" y="140" width="160" height="30" rx="5" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <text x="25" y="160" font-family="Arial" font-size="12" fill="#9CA3AF">Date of Birth</text>
+    
+    <rect x="20" y="180" width="160" height="30" rx="5" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <text x="25" y="200" font-family="Arial" font-size="12" fill="#9CA3AF">Phone Number</text>
+    
+    <!-- Checkbox -->
+    <rect x="20" y="220" width="15" height="15" rx="3" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+    <text x="45" y="232" font-family="Arial" font-size="12" fill="#4B5563">I agree to terms</text>
+    
+    <!-- Submit Button -->
+    <rect x="20" y="250" width="160" height="35" rx="5" fill="#14B8A6"/>
+    <text x="70" y="273" font-family="Arial" font-size="14" font-weight="bold" fill="white">Register</text>
+  </g>
+  
+  <!-- Healthcare Professional -->
+  <g transform="translate(150, 200)">
+    <!-- Head -->
+    <circle cx="50" cy="50" r="40" fill="#FFD8B4"/>
+    <!-- Hair -->
+    <path d="M20 40C20 40 15 25 30 15C45 5 55 5 70 15C85 25 80 40 80 40V50H20V40Z" fill="#4B4B4B"/>
+    <!-- Face -->
+    <circle cx="35" cy="45" r="4" fill="#333333"/> <!-- Left Eye -->
+    <circle cx="65" cy="45" r="4" fill="#333333"/> <!-- Right Eye -->
+    <path d="M45 60C45 60 50 65 55 60" stroke="#333333" stroke-width="2" stroke-linecap="round"/> <!-- Smile -->
+    
+    <!-- Body/Scrubs -->
+    <path d="M10 90C10 90 20 70 50 70C80 70 90 90 90 90V200H10V90Z" fill="#14B8A6"/>
+    
+    <!-- Stethoscope -->
+    <circle cx="50" cy="110" r="6" fill="#333333"/>
+    <path d="M50 110C50 110 50 130 35 145" stroke="#333333" stroke-width="3" stroke-linecap="round"/>
+    <path d="M50 110C50 110 50 130 65 145" stroke="#333333" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Clipboard -->
+    <g transform="translate(100, 50)">
+      <rect x="0" y="0" width="60" height="80" rx="5" fill="#F0F0F0" stroke="#D1D5DB" stroke-width="1"/>
+      <rect x="0" y="0" width="60" height="15" rx="5" fill="#D1D5DB"/>
+      <rect x="10" y="25" width="40" height="3" rx="1.5" fill="#9CA3AF"/>
+      <rect x="10" y="35" width="40" height="3" rx="1.5" fill="#9CA3AF"/>
+      <rect x="10" y="45" width="30" height="3" rx="1.5" fill="#9CA3AF"/>
+      <rect x="10" y="55" width="40" height="3" rx="1.5" fill="#9CA3AF"/>
+    </g>
+  </g>
+  
+  <!-- Medical Icons -->
+  <g transform="translate(550, 150)">
+    <!-- Medical Cross -->
+    <rect x="0" y="20" width="60" height="15" rx="5" fill="#3B82F6"/>
+    <rect x="22.5" y="0" width="15" height="60" rx="5" fill="#3B82F6"/>
+    
+    <!-- Heartbeat Line -->
+    <path d="M0 100L20 100L30 80L40 120L50 100L60 100L70 90L80 110L100 110" 
+          stroke="#3B82F6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Pill -->
+    <g transform="translate(0, 150)">
+      <rect x="0" y="0" width="60" height="30" rx="15" fill="#14B8A6"/>
+      <rect x="30" y="0" width="30" height="30" rx="15" fill="#0D9488"/>
+    </g>
+  </g>
+  
+  <!-- Data Security Elements -->
+  <g transform="translate(600, 350)">
+    <!-- Shield -->
+    <path d="M50 0L100 0L100 40C100 70 75 80 50 100C25 80 0 70 0 40L0 0L50 0Z" fill="#E6F7F5"/>
+    <path d="M50 15L85 15L85 40C85 60 67.5 70 50 85C32.5 70 15 60 15 40L15 15L50 15Z" fill="#14B8A6"/>
+    <path d="M40 45L47 52L65 35" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Abstract Decorative Elements -->
+  <circle cx="100" cy="100" r="30" fill="#3B82F6" opacity="0.2"/>
+  <circle cx="130" cy="150" r="20" fill="#14B8A6" opacity="0.2"/>
+  <circle cx="80" cy="180" r="25" fill="#3B82F6" opacity="0.2"/>
+  
+  <circle cx="700" cy="500" r="30" fill="#3B82F6" opacity="0.2"/>
+  <circle cx="670" cy="450" r="20" fill="#14B8A6" opacity="0.2"/>
+  <circle cx="720" cy="420" r="25" fill="#3B82F6" opacity="0.2"/>
+</svg>
