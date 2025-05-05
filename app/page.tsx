@@ -94,30 +94,36 @@ export default function HomePage() {
                     </div>
 
                     <nav className="hidden md:flex items-center gap-6">
-                        <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">
+                        <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors cursor-pointer">
                             Features
                         </Link>
-                        <Link href="#how-it-works" className="text-sm font-medium hover:text-primary transition-colors">
+                        <Link
+                            href="#how-it-works"
+                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer"
+                        >
                             How It Works
                         </Link>
-                        <Link href="#why-us" className="text-sm font-medium hover:text-primary transition-colors">
+                        <Link href="#why-us" className="text-sm font-medium hover:text-primary transition-colors cursor-pointer">
                             Why Us
                         </Link>
-                        <Link href="#testimonials" className="text-sm font-medium hover:text-primary transition-colors">
+                        <Link
+                            href="#testimonials"
+                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer"
+                        >
                             Testimonials
                         </Link>
                     </nav>
 
                     <div className="flex items-center gap-4">
-                        <Link href="/login">
+                        <Link href="/login" className="cursor-pointer">
                             <Button variant="outline" size="sm" className="hidden md:flex">
                                 Log In
                             </Button>
                         </Link>
-                        <Link href="/register">
+                        <Link href="/register" className="cursor-pointer">
                             <Button
                                 size="sm"
-                                className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600"
+                                className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300"
                             >
                                 Register
                             </Button>
@@ -146,7 +152,7 @@ export default function HomePage() {
                             <nav className="flex flex-col space-y-4">
                                 <Link
                                     href="#features"
-                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md"
+                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md cursor-pointer"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     Features
@@ -154,7 +160,7 @@ export default function HomePage() {
                                 </Link>
                                 <Link
                                     href="#how-it-works"
-                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md"
+                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md cursor-pointer"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     How It Works
@@ -162,7 +168,7 @@ export default function HomePage() {
                                 </Link>
                                 <Link
                                     href="#why-us"
-                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md"
+                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md cursor-pointer"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     Why Us
@@ -170,16 +176,16 @@ export default function HomePage() {
                                 </Link>
                                 <Link
                                     href="#testimonials"
-                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md"
+                                    className="flex items-center justify-between px-2 py-3 text-sm font-medium hover:bg-gray-100 rounded-md cursor-pointer"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     Testimonials
                                     <ChevronRight className="h-4 w-4 opacity-50" />
                                 </Link>
                                 <div className="pt-4 mt-4 border-t border-gray-200">
-                                    <Button className="w-full mb-2">Book a Demo</Button>
-                                    <Link href="/login" className="w-full">
-                                        <Button variant="outline" className="w-full">
+                                    <Button className="w-full mb-2 transition-all duration-300 hover:shadow-md">Book a Demo</Button>
+                                    <Link href="/login" className="w-full cursor-pointer">
+                                        <Button variant="outline" className="w-full transition-all duration-300 hover:bg-gray-100">
                                             Log In
                                         </Button>
                                     </Link>
@@ -195,7 +201,7 @@ export default function HomePage() {
                 <section className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-teal-50">
                     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-8 md:gap-16">
                         <div className="flex-1 space-y-6 text-center md:text-left relative z-10">
-                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4">
+                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4 cursor-pointer">
                                 <span className="text-xs">AI-Powered Healthcare Platform</span>
                             </div>
                             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
@@ -212,17 +218,17 @@ export default function HomePage() {
                                 telemedicine, lab tests, and billing.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
-                                <Link href="/register">
+                                <Link href="/register" className="cursor-pointer">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                        className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl"
                                     >
                                         Get Started
                                         <ArrowRight className="ml-2 h-4 w-4" />
                                     </Button>
                                 </Link>
-                                <Link href="/login">
-                                    <Button variant="outline" size="lg">
+                                <Link href="/login" className="cursor-pointer">
+                                    <Button variant="outline" size="lg" className="transition-all duration-300 hover:bg-gray-100">
                                         Log In
                                     </Button>
                                 </Link>
@@ -289,7 +295,7 @@ export default function HomePage() {
 
                     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-16 relative z-10">
-                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4">
+                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4 cursor-pointer">
                                 FEATURES
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Comprehensive Healthcare Platform</h2>
@@ -308,7 +314,7 @@ export default function HomePage() {
                                 colorTo="cyan"
                             />
 
-                            <Card className="group border-none shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden">
+                            <Card className="group border-none shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden cursor-pointer">
                                 <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-teal-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 <CardHeader className="pb-2 relative z-10">
                                     <div className="w-14 h-14 rounded-2xl bg-teal-100 flex items-center justify-center mb-4 group-hover:bg-teal-200 transition-colors duration-300">
@@ -328,7 +334,7 @@ export default function HomePage() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="group border-none shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden">
+                            <Card className="group border-none shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden cursor-pointer">
                                 <div className="absolute inset-0 bg-gradient-to-br from-green-50 to-green-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 <CardHeader className="pb-2 relative z-10">
                                     <div className="w-14 h-14 rounded-2xl bg-green-100 flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors duration-300">
@@ -348,7 +354,7 @@ export default function HomePage() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="group border-none shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden">
+                            <Card className="group border-none shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden cursor-pointer">
                                 <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-purple-100/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 <CardHeader className="pb-2 relative z-10">
                                     <div className="w-14 h-14 rounded-2xl bg-purple-100 flex items-center justify-center mb-4 group-hover:bg-purple-200 transition-colors duration-300">
@@ -370,7 +376,7 @@ export default function HomePage() {
                         </div>
 
                         <div className="mt-12 flex justify-center">
-                            <Button variant="outline" className="gap-2 group">
+                            <Button variant="outline" className="gap-2 group transition-all duration-300 hover:bg-gray-100">
                                 View All Features
                                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Button>
@@ -382,7 +388,7 @@ export default function HomePage() {
                 <section className="py-20 bg-gray-50">
                     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-16">
-                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4">
+                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4 cursor-pointer">
                                 PRICING
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Healthcare Plans for Everyone</h2>
@@ -394,8 +400,8 @@ export default function HomePage() {
                         <SubscriptionSlider />
 
                         <div className="mt-10 text-center">
-                            <Link href="/subscriptions">
-                                <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600">
+                            <Link href="/subscriptions" className="cursor-pointer">
+                                <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 hover:shadow-lg">
                                     View All Plans
                                 </Button>
                             </Link>
@@ -431,7 +437,7 @@ export default function HomePage() {
                 <section id="how-it-works" className="py-20 bg-gray-50">
                     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-16">
-                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4">
+                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4 cursor-pointer">
                                 WORKFLOW
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
@@ -559,7 +565,7 @@ export default function HomePage() {
                 <section id="why-us" className="py-20 bg-white">
                     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="text-center mb-16">
-                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4">
+                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4 cursor-pointer">
                                 ADVANTAGES
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose AIMED360</h2>
@@ -570,7 +576,7 @@ export default function HomePage() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50">
+                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50 cursor-pointer">
                                 <div className="flex-shrink-0">
                                     <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center">
                                         <Shield className="h-7 w-7 text-blue-600" />
@@ -585,7 +591,7 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50">
+                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50 cursor-pointer">
                                 <div className="flex-shrink-0">
                                     <div className="w-14 h-14 rounded-xl bg-teal-100 flex items-center justify-center">
                                         <Zap className="h-7 w-7 text-teal-600" />
@@ -600,7 +606,7 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50">
+                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50 cursor-pointer">
                                 <div className="flex-shrink-0">
                                     <div className="w-14 h-14 rounded-xl bg-green-100 flex items-center justify-center">
                                         <Lock className="h-7 w-7 text-green-600" />
@@ -615,7 +621,7 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50">
+                            <div className="flex gap-4 p-6 rounded-xl transition-all hover:bg-slate-50 cursor-pointer">
                                 <div className="flex-shrink-0">
                                     <div className="w-14 h-14 rounded-xl bg-purple-100 flex items-center justify-center">
                                         <CheckCircle className="h-7 w-7 text-purple-600" />
@@ -639,7 +645,7 @@ export default function HomePage() {
                                         Watch our demo to see how our platform streamlines workflows, improves patient outcomes, and boosts
                                         practice efficiency.
                                     </p>
-                                    <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 w-fit">
+                                    <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 w-fit transition-all duration-300 hover:shadow-lg">
                                         Watch Demo Video
                                     </Button>
                                 </div>
@@ -648,7 +654,7 @@ export default function HomePage() {
                                         <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-white/20 rounded-full"></div>
                                         <div className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-blue-200/30 rounded-full"></div>
                                     </div>
-                                    <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg z-10">
+                                    <div className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-lg z-10 cursor-pointer hover:scale-105 transition-transform duration-300">
                                         <div className="w-14 h-14 rounded-full bg-gradient-to-r from-blue-600 to-teal-500 flex items-center justify-center">
                                             <svg className="w-6 h-6 text-white ml-1" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
@@ -665,7 +671,7 @@ export default function HomePage() {
                 <section id="testimonials" className="py-20 bg-gray-50 overflow-hidden">
                     <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                         <div className="text-center mb-16">
-                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4">
+                            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20 mb-4 cursor-pointer">
                                 TESTIMONIALS
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">What Our Users Say</h2>
@@ -679,7 +685,7 @@ export default function HomePage() {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50"
+                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 transition-all duration-300"
                                     onClick={() =>
                                         setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
                                     }
@@ -691,7 +697,7 @@ export default function HomePage() {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50"
+                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 transition-all duration-300"
                                     onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)}
                                 >
                                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -728,8 +734,7 @@ export default function HomePage() {
                                 {testimonials.map((_, i) => (
                                     <button
                                         key={i}
-                                        className={`w-2 h-2 rounded-full transition-all ${i === currentTestimonial ? "bg-blue-600 w-6" : "bg-gray-300"
-                                            }`}
+                                        className={`w-2 h-2 rounded-full transition-all cursor-pointer ${i === currentTestimonial ? "bg-blue-600 w-6" : "bg-gray-300 hover:bg-gray-400"}`}
                                         onClick={() => setCurrentTestimonial(i)}
                                     />
                                 ))}
@@ -790,16 +795,16 @@ export default function HomePage() {
                                 Revolutionizing healthcare with AI-powered solutions for medical professionals and patients alike.
                             </p>
                             <div className="flex gap-4">
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
                                     <Facebook className="h-5 w-5" />
                                 </a>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
                                     <Twitter className="h-5 w-5" />
                                 </a>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
                                     <Linkedin className="h-5 w-5" />
                                 </a>
-                                <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                                <a href="#" className="text-gray-400 hover:text-white transition-colors cursor-pointer">
                                     <Instagram className="h-5 w-5" />
                                 </a>
                             </div>
@@ -809,22 +814,22 @@ export default function HomePage() {
                             <h3 className="font-bold text-white mb-4">Platform</h3>
                             <ul className="space-y-3">
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Features
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Security
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Integrations
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Pricing
                                     </a>
                                 </li>
@@ -835,22 +840,22 @@ export default function HomePage() {
                             <h3 className="font-bold text-white mb-4">Resources</h3>
                             <ul className="space-y-3">
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Documentation
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         API Reference
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Blog
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Community
                                     </a>
                                 </li>
@@ -861,22 +866,22 @@ export default function HomePage() {
                             <h3 className="font-bold text-white mb-4">Company</h3>
                             <ul className="space-y-3">
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         About Us
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Careers
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Contact
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="text-sm hover:text-white transition-colors">
+                                    <a href="#" className="text-sm hover:text-white transition-colors cursor-pointer">
                                         Privacy Policy
                                     </a>
                                 </li>
