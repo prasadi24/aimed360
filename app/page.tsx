@@ -94,21 +94,27 @@ export default function HomePage() {
                     </div>
 
                     <nav className="hidden md:flex items-center gap-6">
-                        <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors cursor-pointer">
+                        <Link
+                            href="#features"
+                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer hover:underline"
+                        >
                             Features
                         </Link>
                         <Link
                             href="#how-it-works"
-                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer"
+                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer hover:underline"
                         >
                             How It Works
                         </Link>
-                        <Link href="#why-us" className="text-sm font-medium hover:text-primary transition-colors cursor-pointer">
+                        <Link
+                            href="#why-us"
+                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer hover:underline"
+                        >
                             Why Us
                         </Link>
                         <Link
                             href="#testimonials"
-                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer"
+                            className="text-sm font-medium hover:text-primary transition-colors cursor-pointer hover:underline"
                         >
                             Testimonials
                         </Link>
@@ -123,7 +129,7 @@ export default function HomePage() {
                         <Link href="/register" className="cursor-pointer">
                             <Button
                                 size="sm"
-                                className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300"
+                                className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 hover:shadow-lg hover:scale-105"
                             >
                                 Register
                             </Button>
@@ -221,7 +227,7 @@ export default function HomePage() {
                                 <Link href="/register" className="cursor-pointer">
                                     <Button
                                         size="lg"
-                                        className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl"
+                                        className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                                     >
                                         Get Started
                                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -401,7 +407,7 @@ export default function HomePage() {
 
                         <div className="mt-10 text-center">
                             <Link href="/subscriptions" className="cursor-pointer">
-                                <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 hover:shadow-lg">
+                                <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 hover:shadow-lg hover:scale-105">
                                     View All Plans
                                 </Button>
                             </Link>
@@ -645,7 +651,7 @@ export default function HomePage() {
                                         Watch our demo to see how our platform streamlines workflows, improves patient outcomes, and boosts
                                         practice efficiency.
                                     </p>
-                                    <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 w-fit transition-all duration-300 hover:shadow-lg">
+                                    <Button className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 w-fit transition-all duration-300 hover:shadow-lg hover:scale-105">
                                         Watch Demo Video
                                     </Button>
                                 </div>
@@ -685,7 +691,7 @@ export default function HomePage() {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 transition-all duration-300 hover:scale-110"
                                     onClick={() =>
                                         setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)
                                     }
@@ -697,7 +703,7 @@ export default function HomePage() {
                                 <Button
                                     variant="outline"
                                     size="icon"
-                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 transition-all duration-300"
+                                    className="rounded-full bg-white shadow-lg border-gray-200 hover:bg-gray-50 transition-all duration-300 hover:scale-110"
                                     onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)}
                                 >
                                     <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -769,7 +775,7 @@ export default function HomePage() {
                                 <div className="mb-4">
                                     <Input type="text" placeholder="Organization" className="bg-white text-gray-900" />
                                 </div>
-                                <Button className="w-full bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl">
+                                <Button className="w-full bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
                                     Book Your Free Demo
                                 </Button>
                                 <p className="text-xs text-gray-500 mt-4 text-center">

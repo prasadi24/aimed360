@@ -4,11 +4,26 @@ import type React from "react"
 
 import { usePathname } from "next/navigation"
 import Link from "next/link"
-import { Users, Settings, CreditCard, LayoutDashboard, ClipboardList, Shield, Bell, FileText, BarChart3, UserCog, LogOut, Bot, ChevronRight, Menu } from 'lucide-react'
+import {
+    Users,
+    Settings,
+    CreditCard,
+    LayoutDashboard,
+    ClipboardList,
+    Shield,
+    Bell,
+    FileText,
+    BarChart3,
+    UserCog,
+    LogOut,
+    Bot,
+    ChevronRight,
+    Menu,
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { signOut } from "@/app/actions/auth"
-import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { useSidebar } from "./sidebar-context"
 
 interface SidebarLinkProps {
     href: string
@@ -23,11 +38,12 @@ function SidebarLink({ href, icon, title, isActive, isCollapsed }: SidebarLinkPr
         <Link
             href={href}
             className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 transition-all",
+                "sidebar-link flex items-center gap-3 rounded-lg px-3 py-2 transition-all cursor-pointer",
                 isActive
                     ? "bg-gradient-to-r from-blue-600/20 to-teal-500/20 text-primary"
                     : "text-gray-400 hover:bg-gray-800/50 hover:text-white",
             )}
+            title={isCollapsed ? title : undefined}
         >
             <div className="flex h-6 w-6 items-center justify-center">{icon}</div>
             {!isCollapsed && <span className="font-medium">{title}</span>}
@@ -38,7 +54,7 @@ function SidebarLink({ href, icon, title, isActive, isCollapsed }: SidebarLinkPr
 
 export function AdminSidebar() {
     const pathname = usePathname()
-    const [isCollapsed, setIsCollapsed] = useState(false)
+    const { isCollapsed, toggleSidebar } = useSidebar()
 
     const adminLinks = [
         {
@@ -98,17 +114,14 @@ export function AdminSidebar() {
         },
     ]
 
-    const toggleSidebar = () => {
-        setIsCollapsed(!isCollapsed)
-    }
-
     return (
         <div
             className={cn(
-                "fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 text-white transition-all duration-300",
-                isCollapsed ? "w-16" : "w-64",
+                "fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 text-white transition-all duration-300 overflow-hidden", // 👈 add this
+                isCollapsed ? "w-16 sidebar-collapsed" : "w-64 sidebar-expanded"
             )}
         >
+
             <div className="flex h-16 items-center justify-between border-b border-gray-800 px-4">
                 {!isCollapsed && (
                     <div className="flex items-center gap-2">
@@ -123,7 +136,13 @@ export function AdminSidebar() {
                         <span className="font-bold text-white">A</span>
                     </div>
                 )}
-                <Button variant="ghost" size="icon" onClick={toggleSidebar} className="text-gray-400 hover:text-white">
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleSidebar}
+                    className="sidebar-link text-gray-400 hover:text-white cursor-pointer"
+                    title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+                >
                     <Menu className="h-5 w-5" />
                 </Button>
             </div>
@@ -156,9 +175,10 @@ export function AdminSidebar() {
                         type="submit"
                         variant="ghost"
                         className={cn(
-                            "w-full flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800",
+                            "sidebar-link w-full flex items-center gap-2 text-gray-400 hover:text-white hover:bg-gray-800 cursor-pointer",
                             isCollapsed && "justify-center",
                         )}
+                        title={isCollapsed ? "Sign Out" : undefined}
                     >
                         <LogOut className="h-5 w-5" />
                         {!isCollapsed && <span>Sign Out</span>}
