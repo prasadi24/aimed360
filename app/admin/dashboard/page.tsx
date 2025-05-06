@@ -14,7 +14,7 @@ import {
     FileText,
     Bell,
 } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
+//import { createClient } from "@/lib/supabase/client"
 import { MedicalLoader } from "@/components/ui/loader"
 
 interface DashboardStats {
@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
     useEffect(() => {
         async function fetchDashboardStats() {
             try {
-                const supabase = createClient()
+                //const supabase = createClient()
 
                 // In a real application, these would be actual database queries
                 // For now, we'll simulate the data

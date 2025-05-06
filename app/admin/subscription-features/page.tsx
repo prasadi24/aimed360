@@ -33,7 +33,8 @@ import { AddFeatureDialog } from "@/components/admin/add-feature-dialog"
 import { getDisplayName, checkIsAdmin } from "@/lib/auth-utils"
 
 export default function AdminSubscriptionFeaturesPage() {
-    const [userName, setUserName] = useState<string>("")
+    //const [userName, setUserName] = useState<string>("")
+
     const [plans, setPlans] = useState<Plan[]>([])
     const [features, setFeatures] = useState<Feature[]>([])
     const [planFeatureMappings, setPlanFeatureMappings] = useState<PlanFeature[]>([])
@@ -55,7 +56,7 @@ export default function AdminSubscriptionFeaturesPage() {
                 const user = sessionData.session.user
 
                 // Get display name using utility function
-                setUserName(getDisplayName(user))
+                // setUserName(getDisplayName(user))
 
                 // Check if user is admin using our RPC function
                 const isAdmin = await checkIsAdmin(user.id)
@@ -65,6 +66,8 @@ export default function AdminSubscriptionFeaturesPage() {
                 }
 
                 // Fetch all subscription plans
+
+
                 const { data: plansData } = await supabase.from("subscription_plans").select("*").order("price")
                 if (plansData) {
                     const typedPlans: Plan[] = plansData.map((plan: any) => ({
