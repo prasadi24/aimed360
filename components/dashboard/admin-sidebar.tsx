@@ -19,6 +19,7 @@ import {
     Bot,
     ChevronRight,
     Menu,
+    Stethoscope,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { signOut } from "@/app/actions/auth"
@@ -66,6 +67,11 @@ export function AdminSidebar() {
             title: "User Management",
             href: "/admin/users",
             icon: <Users className="h-5 w-5" />,
+        },
+        {
+            title: "Doctors",
+            href: "/admin/doctors",
+            icon: <Stethoscope className="h-5 w-5" />,
         },
         {
             title: "AI Management",
@@ -117,11 +123,10 @@ export function AdminSidebar() {
     return (
         <div
             className={cn(
-                "fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 text-white transition-all duration-300 overflow-hidden", // 👈 add this
-                isCollapsed ? "w-16 sidebar-collapsed" : "w-64 sidebar-expanded"
+                "fixed inset-y-0 left-0 z-50 flex flex-col bg-gray-900 text-white transition-all duration-300 overflow-hidden",
+                isCollapsed ? "w-16 sidebar-collapsed" : "w-64 sidebar-expanded",
             )}
         >
-
             <div className="flex h-16 items-center justify-between border-b border-gray-800 px-4">
                 {!isCollapsed && (
                     <div className="flex items-center gap-2">
