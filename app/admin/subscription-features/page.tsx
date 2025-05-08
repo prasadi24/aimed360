@@ -30,7 +30,7 @@ interface PlanFeature {
 import { FeatureManagementTable } from "@/components/admin/feature-management-table"
 import { PlanFeatureMapping } from "@/components/admin/plan-feature-mapping"
 import { AddFeatureDialog } from "@/components/admin/add-feature-dialog"
-import { getDisplayName, checkIsAdmin } from "@/lib/auth-utils"
+import { checkIsAdmin } from "@/lib/auth-utils"
 
 export default function AdminSubscriptionFeaturesPage() {
     //const [userName, setUserName] = useState<string>("")
@@ -53,13 +53,13 @@ export default function AdminSubscriptionFeaturesPage() {
                     return
                 }
 
-                const user = sessionData.session.user
+                //const user = sessionData.session.user
 
                 // Get display name using utility function
                 // setUserName(getDisplayName(user))
 
                 // Check if user is admin using our RPC function
-                const isAdmin = await checkIsAdmin(user.id)
+                const isAdmin = await checkIsAdmin()
                 if (!isAdmin) {
                     router.push("/login")
                     return
@@ -68,40 +68,37 @@ export default function AdminSubscriptionFeaturesPage() {
                 // Fetch all subscription plans
 
 
-                const { data: plansData } = await supabase.from("subscription_plans").select("*").order("price")
-                if (plansData) {
-                    const typedPlans: Plan[] = plansData.map((plan: any) => ({
-                        id: plan.id,
-                        name: plan.name,
-                        description: plan.description,
-                        price: plan.price,
-                        billing_cycle: plan.billing_cycle,
-                    }))
-                    setPlans(typedPlans)
-                }
+                const { data: plansData } = await supabase
+                    .from("subscription_plans")
+                    .select("*")
+                    .order("price") as { data: Plan[] | null }
+
+
+
 
                 // Fetch all subscription features
-                const { data: featuresData } = await supabase.from("subscription_features").select("*").order("name")
-                if (featuresData) {
-                    const typedFeatures: Feature[] = featuresData.map((feature: any) => ({
-                        id: feature.id,
-                        name: feature.name,
-                        description: feature.description,
-                    }))
-                    setFeatures(typedFeatures)
-                }
+                const { data: featuresData } = await supabase
+                    .from("subscription_features")
+                    .select("*")
+                    .order("name") as { data: Feature[] | null }
+
+
+
 
                 // Fetch plan-feature mappings
-                const { data: mappingsData } = await supabase.from("plan_features").select("plan_id, feature_id")
-                if (mappingsData) {
-                    const typedMappings: PlanFeature[] = mappingsData.map((mapping: any) => ({
-                        plan_id: mapping.plan_id,
-                        feature_id: mapping.feature_id,
-                    }))
-                    setPlanFeatureMappings(typedMappings)
-                }
+                const { data: mappingsData } = await supabase
+                    .from("plan_features")
+                    .select("plan_id, feature_id") as { data: PlanFeature[] | null }
+
+
+
+                if (plansData) setPlans(plansData)
+                if (featuresData) setFeatures(featuresData)
+                if (mappingsData) setPlanFeatureMappings(mappingsData)
 
                 setLoading(false)
+
+
             } catch (error) {
                 console.error("Error fetching data:", error)
                 router.push("/login")

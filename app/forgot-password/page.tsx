@@ -25,7 +25,8 @@ export default function ForgotPasswordPage() {
             const formData = new FormData()
             formData.append("email", email)
 
-            const { error, success } = await requestPasswordReset(formData)
+            const { error } = await requestPasswordReset(formData)
+
 
             if (error) {
                 setError(error.message)
@@ -144,11 +145,10 @@ export default function ForgotPasswordPage() {
                                         </svg>
                                     </div>
                                     <p className="text-gray-700 mb-4">
-                                        We've sent a password reset link to <strong>{email}</strong>
+                                        We&apos;ve sent a password reset link to <strong>{email}</strong>
                                     </p>
                                     <p className="text-sm text-muted-foreground mb-4">
-                                        If you don't see the email, check other places it might be, like your junk, spam, social, or other
-                                        folders.
+                                        If you don&apos;t see the email, check other places it might be, like your junk, spam, social, or other folders.
                                     </p>
                                     <Button variant="outline" className="mt-2" onClick={() => setIsSubmitted(false)}>
                                         Try another email

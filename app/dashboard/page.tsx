@@ -8,9 +8,36 @@ import { Calendar, Clock, FileText, Activity, Bell, MessageSquare, Video } from 
 import { createClient } from "@/lib/supabase/client"
 import { MedicalLoader } from "@/components/ui/loader"
 
+interface Appointment {
+    id: number
+    title: string
+    doctor: string
+    date: string
+    time: string
+}
+
+interface Activity {
+    id: number
+    type: string
+    description: string
+    date: string
+}
+
+interface Notification {
+    id: number
+    message: string
+    date: string
+}
+
+interface UserDashboardData {
+    appointments: Appointment[]
+    recentActivities: Activity[]
+    notifications: Notification[]
+}
+
 export default function DashboardPage() {
     const [loading, setLoading] = useState(true)
-    const [userData, setUserData] = useState<any>(null)
+    const [userData, setUserData] = useState<UserDashboardData | null>(null)
 
     useEffect(() => {
         async function fetchUserData() {
@@ -61,6 +88,13 @@ export default function DashboardPage() {
             </div>
         )
     }
+    if (!userData) {
+        return (
+            <div className="container mx-auto px-4 py-8 text-center">
+                <p className="text-muted-foreground">Unable to load dashboard data. Please try again later.</p>
+            </div>
+        )
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -98,7 +132,7 @@ export default function DashboardPage() {
                             <CardContent>
                                 {userData.appointments.length > 0 ? (
                                     <div className="space-y-4">
-                                        {userData.appointments.map((appointment: any) => (
+                                        {userData.appointments.map((appointment) => (
                                             <div key={appointment.id} className="flex items-start gap-3">
                                                 <div className="bg-blue-100 p-2 rounded-full">
                                                     <Calendar className="h-4 w-4 text-blue-700" />
@@ -134,7 +168,7 @@ export default function DashboardPage() {
                             <CardContent>
                                 {userData.recentActivities.length > 0 ? (
                                     <div className="space-y-4">
-                                        {userData.recentActivities.map((activity: any) => (
+                                        {userData.recentActivities.map((activity) => (
                                             <div key={activity.id} className="flex items-start gap-3">
                                                 <div className="bg-green-100 p-2 rounded-full">
                                                     <Activity className="h-4 w-4 text-green-700" />
@@ -165,7 +199,7 @@ export default function DashboardPage() {
                             <CardContent>
                                 {userData.notifications.length > 0 ? (
                                     <div className="space-y-4">
-                                        {userData.notifications.map((notification: any) => (
+                                        {userData.notifications.map((notification) => (
                                             <div key={notification.id} className="flex items-start gap-3">
                                                 <div className="bg-purple-100 p-2 rounded-full">
                                                     <Bell className="h-4 w-4 text-purple-700" />
@@ -237,7 +271,7 @@ export default function DashboardPage() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {userData.appointments.length > 0 ? (
-                                userData.appointments.map((appointment: any) => (
+                                userData.appointments.map((appointment) => (
                                     <div key={appointment.id} className="flex items-start gap-4 p-4 border rounded-lg">
                                         <div className="bg-blue-100 p-3 rounded-full">
                                             <Calendar className="h-5 w-5 text-blue-700" />
@@ -270,7 +304,7 @@ export default function DashboardPage() {
                                 <div className="text-center py-8">
                                     <Calendar className="h-12 w-12 mx-auto text-muted-foreground" />
                                     <h3 className="mt-4 text-lg font-medium">No Appointments</h3>
-                                    <p className="text-sm text-muted-foreground mt-2">You don't have any upcoming appointments.</p>
+                                    <p className="text-sm text-muted-foreground mt-2">You don&apos;t have any upcoming appointments.</p>
                                     <Button className="mt-4">Schedule an Appointment</Button>
                                 </div>
                             )}

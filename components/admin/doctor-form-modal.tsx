@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -13,25 +12,36 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { getDoctor, createDoctor, updateDoctor, getSpecializations } from "@/app/actions/doctors"
 import { MedicalLoader } from "@/components/ui/loader"
-import { Check, ChevronRight, ChevronLeft, User, Briefcase, MapPin, Mail, X, AlertTriangle } from "lucide-react"
+import {
+    Check,
+    ChevronRight,
+    ChevronLeft,
+    User,
+    Briefcase,
+    MapPin,
+    Mail,
+    X,
+    AlertTriangle,
+    UserPlus,
+} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 
 // Define the form schema with Zod
 const doctorFormSchema = z.object({
-    title: z.string().optional(),
+    title: z.string().default("Dr."),
     firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
     lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
     specializations: z.array(z.string()).default([]),
-    licenseNumber: z.string().optional(),
-    yearsOfExperience: z.coerce.number().int().positive().optional().or(z.literal("")),
+    licenseNumber: z.string().min(1, { message: "License number is required." }),
+    yearsOfExperience: z.coerce.number().int().positive({ message: "Years of experience is required." }),
     bio: z.string().optional(),
-    consultationFee: z.coerce.number().positive().optional().or(z.literal("")),
+    consultationFee: z.coerce.number().positive({ message: "Consultation fee is required." }),
     contactEmail: z.string().email({ message: "Please enter a valid email address." }).optional().or(z.literal("")),
     contactPhone: z.string().optional(),
     address: z.string().optional(),
-    city: z.string().optional(),
+    city: z.string().min(1, { message: "City is required." }),
     state: z.string().optional(),
     postalCode: z.string().optional(),
     country: z.string().default("India"),
@@ -89,21 +99,21 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
     const [specializations, setSpecializations] = useState<Specialization[]>([])
     const [currentStep, setCurrentStep] = useState(0)
     const [submitError, setSubmitError] = useState<string | null>(null)
-    const router = useRouter()
+    // const router = useRouter()
     const [isEditMode, setIsEditMode] = useState(false)
 
     // Initialize the form
     const form = useForm<DoctorFormValues>({
         resolver: zodResolver(doctorFormSchema),
         defaultValues: {
-            title: "",
+            title: "Dr.",
             firstName: "",
             lastName: "",
             specializations: [],
             licenseNumber: "",
-            yearsOfExperience: "" as any, // Use empty string as initial value
+            yearsOfExperience: 0,
             bio: "",
-            consultationFee: "" as any, // Use empty string as initial value
+            consultationFee: 0,
             contactEmail: "",
             contactPhone: "",
             address: "",
@@ -116,7 +126,7 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
     })
 
     // Get form state for validation
-    const { isValid, errors } = form.formState
+    const { errors } = form.formState
 
     // Fetch specializations when the modal opens
     useEffect(() => {
@@ -146,14 +156,14 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
             setCurrentStep(0)
             setSubmitError(null)
             form.reset({
-                title: "",
+                title: "Dr.",
                 firstName: "",
                 lastName: "",
                 specializations: [],
                 licenseNumber: "",
-                yearsOfExperience: "" as any,
+                yearsOfExperience: 0,
                 bio: "",
-                consultationFee: "" as any,
+                consultationFee: 0,
                 contactEmail: "",
                 contactPhone: "",
                 address: "",
@@ -180,10 +190,13 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
 
                     // Map doctor data to form values
                     form.reset({
-                        title: doctor.title || "",
+                        title: doctor.title || "Dr.",
                         firstName: doctor.first_name,
                         lastName: doctor.last_name,
-                        specializations: doctor.doctor_specializations?.map((ds: { specializations: { name: string } }) => ds.specializations.name) || [],
+                        specializations:
+                            doctor.doctor_specializations?.map(
+                                (ds: { specializations: { name: string } }) => ds.specializations.name,
+                            ) || [],
                         licenseNumber: doctor.license_number || "",
                         yearsOfExperience: doctor.years_of_experience === null ? "" : doctor.years_of_experience,
                         bio: doctor.bio || "",
@@ -214,7 +227,7 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
         } else {
             setIsEditMode(false)
         }
-    }, [isOpen, doctorId, form])
+    }, [isOpen, doctorId, form, onClose])
 
     // Check if a step has validation errors
     const stepHasErrors = (stepIndex: number) => {
@@ -233,8 +246,10 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
             // Convert empty strings to null for numeric fields
             const formattedData = {
                 ...data,
-                yearsOfExperience: data.yearsOfExperience === "" ? null : data.yearsOfExperience,
-                consultationFee: data.consultationFee === "" ? null : data.consultationFee,
+                yearsOfExperience:
+                    typeof data.yearsOfExperience === "undefined" || data.yearsOfExperience === 0 ? null : data.yearsOfExperience,
+                consultationFee:
+                    typeof data.consultationFee === "undefined" || data.consultationFee === 0 ? null : data.consultationFee,
                 contactEmail: data.contactEmail === "" ? null : data.contactEmail,
                 userId: undefined,
             }
@@ -251,39 +266,59 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
             console.log("Server response:", result)
 
             if (result.success) {
-                toast.success(`Doctor ${isEditMode ? "updated" : "added"} successfully`)
+                if (isEditMode) {
+                    toast.success(`Doctor ${data.firstName} ${data.lastName} updated successfully`, {
+                        description: "The doctor's information has been updated in the system.",
+                        duration: 5000,
+                    })
+                } else {
+                    toast.success(`Doctor ${data.firstName} ${data.lastName} added successfully`, {
+                        description: "The new doctor has been added to the system.",
+                        duration: 5000,
+                    })
+                }
                 form.reset()
                 onSuccess()
                 onClose()
             } else {
                 console.error(`Failed to ${isEditMode ? "update" : "add"} doctor:`, result.error)
                 setSubmitError(result.error || `Failed to ${isEditMode ? "update" : "add"} doctor`)
-                toast.error(`Failed to ${isEditMode ? "update" : "add"} doctor: ${result.error}`)
+                toast.error(`Failed to ${isEditMode ? "update" : "add"} doctor: ${result.error}`, {
+                    description: "Please try again or contact support if the issue persists.",
+                    duration: 7000,
+                })
             }
-        } catch (error: any) {
-            console.error(`Error ${isEditMode ? "updating" : "adding"} doctor:`, error)
-            setSubmitError(error.message || "An unexpected error occurred")
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error(`Error ${isEditMode ? "updating" : "adding"} doctor:`, error.message)
+                setSubmitError(error.message)
+            } else {
+                console.error(`Unknown error ${isEditMode ? "updating" : "adding"} doctor:`, error)
+                setSubmitError("An unexpected error occurred")
+            }
+
             toast.error(`An unexpected error occurred while ${isEditMode ? "updating" : "adding"} the doctor`)
-        } finally {
+        }
+        finally {
             setIsLoading(false)
         }
     }
 
     // Check if current step fields are valid
-    const currentStepIsValid = () => {
-        const currentFields = formSteps[currentStep].fields
-        return currentFields.every((field) => {
-            // Skip validation for optional fields that are empty
-            if (field !== "firstName" && field !== "lastName" && !form.getValues(field)) {
-                return true
-            }
-            return !errors[field]
-        })
-    }
+    // const currentStepIsValid = () => {
+    //     const currentFields = formSteps[currentStep].fields
+    //     return currentFields.every((field) => {
+    //         // Skip validation for optional fields that are empty
+    //         if (field !== "firstName" && field !== "lastName" && !form.getValues(field)) {
+    //             return true
+    //         }
+    //         return !errors[field]
+    //     })
+    // }
 
     // Navigate to next step
     const handleNext = async () => {
-        const isValid = await form.trigger(formSteps[currentStep].fields as any)
+        const isValid = await form.trigger(formSteps[currentStep].fields)
         if (isValid) {
             if (currentStep < formSteps.length - 1) {
                 setCurrentStep((prev) => prev + 1)
@@ -394,12 +429,12 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
                     </div>
 
                     {/* Main content */}
-                    <div className="flex-1 p-8 overflow-y-auto">
+                    <div className="flex-1 p-8 overflow-y-auto flex flex-col">
                         <Form {...form}>
-                            <form className="space-y-6">
+                            <form className="space-y-6 flex flex-col flex-1">
                                 {/* Step 1: Personal Information */}
                                 {currentStep === 0 && (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 min-h-[400px]">
                                         <div className="flex items-start space-x-4">
                                             <FormField
                                                 control={form.control}
@@ -466,7 +501,7 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
 
                                 {/* Step 2: Professional Details */}
                                 {currentStep === 1 && (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 min-h-[400px]">
                                         <FormField
                                             control={form.control}
                                             name="specializations"
@@ -515,9 +550,9 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
                                                 name="licenseNumber"
                                                 render={({ field }) => (
                                                     <FormItem className="flex-1 min-h-[85px]">
-                                                        <FormLabel>License Number</FormLabel>
+                                                        <FormLabel>License Number *</FormLabel>
                                                         <FormControl>
-                                                            <Input placeholder="MED12345" {...field} />
+                                                            <Input placeholder="MED12345" required {...field} />
                                                         </FormControl>
                                                         <FormMessage className="text-amber-600" />
                                                     </FormItem>
@@ -529,12 +564,13 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
                                                 name="yearsOfExperience"
                                                 render={({ field }) => (
                                                     <FormItem className="w-1/3 min-h-[85px]">
-                                                        <FormLabel>Years of Experience</FormLabel>
+                                                        <FormLabel>Years of Experience *</FormLabel>
                                                         <FormControl>
                                                             <Input
                                                                 type="number"
                                                                 min="0"
                                                                 placeholder="10"
+                                                                required
                                                                 {...field}
                                                                 value={field.value === undefined ? "" : field.value}
                                                                 onChange={(e) => {
@@ -554,13 +590,14 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
                                             name="consultationFee"
                                             render={({ field }) => (
                                                 <FormItem className="w-1/3 min-h-[85px]">
-                                                    <FormLabel>Consultation Fee</FormLabel>
+                                                    <FormLabel>Consultation Fee *</FormLabel>
                                                     <FormControl>
                                                         <Input
                                                             type="number"
                                                             min="0"
                                                             step="0.01"
                                                             placeholder="1500"
+                                                            required
                                                             {...field}
                                                             value={field.value === undefined ? "" : field.value}
                                                             onChange={(e) => {
@@ -578,7 +615,7 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
 
                                 {/* Step 3: Contact Information */}
                                 {currentStep === 2 && (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 min-h-[400px]">
                                         <div className="flex items-center space-x-4">
                                             <FormField
                                                 control={form.control}
@@ -613,7 +650,7 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
 
                                 {/* Step 4: Address */}
                                 {currentStep === 3 && (
-                                    <div className="space-y-4">
+                                    <div className="space-y-4 min-h-[400px]">
                                         <FormField
                                             control={form.control}
                                             name="address"
@@ -634,9 +671,9 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
                                                 name="city"
                                                 render={({ field }) => (
                                                     <FormItem className="min-h-[85px]">
-                                                        <FormLabel>City</FormLabel>
+                                                        <FormLabel>City *</FormLabel>
                                                         <FormControl>
-                                                            <Input placeholder="Vijayawada" {...field} />
+                                                            <Input placeholder="Vijayawada" required {...field} />
                                                         </FormControl>
                                                         <FormMessage className="text-amber-600" />
                                                     </FormItem>
@@ -696,19 +733,26 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
                                 )}
 
                                 {/* Navigation buttons */}
-                                <div className="flex justify-between pt-4 border-t">
+                                <div className="flex justify-between pt-4 border-t mt-auto">
                                     <Button
                                         type="button"
                                         variant="outline"
                                         onClick={handlePrevious}
                                         disabled={currentStep === 0 || isLoading}
+                                        className="border-teal-300 text-teal-700 hover:bg-teal-50 min-w-[100px]"
                                     >
                                         <ChevronLeft className="mr-2 h-4 w-4" />
                                         Previous
                                     </Button>
 
                                     <div className="flex space-x-2">
-                                        <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={onClose}
+                                            disabled={isLoading}
+                                            className="border-slate-300 text-slate-700 hover:bg-slate-50 min-w-[100px]"
+                                        >
                                             Cancel
                                         </Button>
 
@@ -717,12 +761,19 @@ export function DoctorFormModal({ isOpen, onClose, onSuccess, doctorId }: Doctor
                                                 type="button"
                                                 onClick={handleFinalSubmit}
                                                 disabled={isLoading}
-                                                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                                                className="flex items-center bg-gradient-to-r from-teal-500 to-emerald-600 hover:from-teal-600 hover:to-emerald-700 text-white min-w-[140px] justify-center"
                                             >
+                                                <UserPlus className="h-5 w-5 mr-2" />
                                                 {isLoading ? <MedicalLoader size={20} /> : isEditMode ? "Update Doctor" : "Add Doctor"}
                                             </Button>
                                         ) : (
-                                            <Button type="button" onClick={handleNext} disabled={isLoading}>
+                                            <Button
+                                                type="button"
+                                                onClick={handleNext}
+                                                disabled={isLoading}
+                                                variant="outline"
+                                                className="border-emerald-300 text-emerald-700 hover:bg-emerald-50 min-w-[100px]"
+                                            >
                                                 Next
                                                 <ChevronRight className="ml-2 h-4 w-4" />
                                             </Button>

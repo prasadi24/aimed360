@@ -13,9 +13,14 @@ export default async function PatientDashboardPage() {
         redirect("/login")
     }
 
+    // Add null check for user to fix TypeScript errors
+    if (!user) {
+        redirect("/login")
+    }
+
     const userName = user.user_metadata?.first_name
-        ? `${user.user_metadata.first_name} ${user.user_metadata.last_name}`
-        : user.email
+        ? `${user.user_metadata.first_name} ${user.user_metadata.last_name || ""}`
+        : user.email || "Patient" // Provide fallback value
 
     return (
         <DashboardLayout role="Patient" userName={userName}>

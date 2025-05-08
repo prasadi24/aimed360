@@ -87,13 +87,17 @@ export function FeatureManagementTable({ features: initialFeatures }: FeatureMan
                 description: "Feature updated successfully",
             })
             setEditingId(null)
-        } catch (error: any) {
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : "Failed to update feature"
+
             toast({
                 title: "Error",
-                description: error.message || "Failed to update feature",
+                description: errorMessage,
                 variant: "destructive",
             })
-        } finally {
+        }
+        finally {
             setIsLoading(false)
         }
     }
@@ -127,13 +131,17 @@ export function FeatureManagementTable({ features: initialFeatures }: FeatureMan
                 title: "Success",
                 description: "Feature deleted successfully",
             })
-        } catch (error: any) {
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : "Failed to delete feature"
+
             toast({
                 title: "Error",
-                description: error.message || "Failed to delete feature",
+                description: errorMessage,
                 variant: "destructive",
             })
-        } finally {
+        }
+        finally {
             setIsLoading(false)
             setDeleteDialogOpen(false)
             setFeatureToDelete(null)

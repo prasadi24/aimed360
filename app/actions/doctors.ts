@@ -127,18 +127,21 @@ export async function getDoctors(filters?: {
         // If specialization filter is provided, filter the results client-side
         let filteredData = data
         if (filters?.specialization) {
-            filteredData = data.filter((doctor: any) =>
+            filteredData = data.filter((doctor: Doctor) =>
                 doctor.doctor_specializations?.some(
-                    (ds: any) => ds.specializations.name.toLowerCase() === filters.specialization?.toLowerCase(),
+                    (ds: { specializations: { name: string } }) => ds.specializations.name.toLowerCase() === filters.specialization?.toLowerCase()
                 ),
             )
         }
 
         return { success: true, doctors: filteredData }
-    } catch (error: any) {
-        console.error("Unexpected error in getDoctors:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in getDoctors:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
+
+
 }
 
 // Get a single doctor by ID
@@ -165,9 +168,10 @@ export async function getDoctor(doctorId: string) {
         }
 
         return { success: true, doctor: data }
-    } catch (error: any) {
-        console.error("Unexpected error in getDoctor:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in getDoctor:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -275,9 +279,10 @@ export async function createDoctor(doctorData: DoctorFormData) {
 
         revalidatePath("/admin/doctors")
         return { success: true, doctorId: data.id }
-    } catch (error: any) {
-        console.error("Unexpected error in createDoctor:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in createDoctor:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -340,7 +345,13 @@ export async function updateDoctor(doctorId: string, doctorData: DoctorFormData)
                 .select("specialization_id, specializations(name)")
                 .eq("doctor_id", doctorId)
 
-            const currentSpecNames = currentMappings ? currentMappings.map((m: any) => m.specializations.name) : []
+            const currentSpecNames = currentMappings
+                ? currentMappings.flatMap((m: { specializations: { name: string }[] }) =>
+                    m.specializations.map((s) => s.name)
+                )
+                : []
+
+
 
             // Calculate specs to add and remove
             const specsToAdd = doctorData.specializations.filter((s: string) => !currentSpecNames.includes(s))
@@ -349,8 +360,11 @@ export async function updateDoctor(doctorId: string, doctorData: DoctorFormData)
             // Get IDs of specs to remove
             const specIdsToRemove = currentMappings
                 ? currentMappings
-                    .filter((m: any) => specsToRemove.includes(m.specializations.name))
-                    .map((m: any) => m.specialization_id)
+                    .filter((m: { specializations: { name: string }[] }) =>
+                        m.specializations.some((s) => specsToRemove.includes(s.name))
+                    )
+
+                    .map((m: { specialization_id: string }) => m.specialization_id)
                 : []
 
             // Remove old mappings
@@ -403,9 +417,10 @@ export async function updateDoctor(doctorId: string, doctorData: DoctorFormData)
         revalidatePath(`/admin/doctors/${doctorId}`)
         revalidatePath("/admin/doctors")
         return { success: true }
-    } catch (error: any) {
-        console.error("Unexpected error in updateDoctor:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in updateDoctor:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -423,9 +438,10 @@ export async function deleteDoctor(doctorId: string) {
 
         revalidatePath("/admin/doctors")
         return { success: true }
-    } catch (error: any) {
-        console.error("Unexpected error in deleteDoctor:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in deleteDoctor:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -450,9 +466,10 @@ export async function toggleDoctorStatus(doctorId: string, isActive: boolean) {
         revalidatePath(`/admin/doctors/${doctorId}`)
         revalidatePath("/admin/doctors")
         return { success: true }
-    } catch (error: any) {
-        console.error("Unexpected error in toggleDoctorStatus:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in toggleDoctorStatus:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -477,9 +494,10 @@ export async function toggleDoctorVerifiedStatus(doctorId: string, isVerified: b
         revalidatePath(`/admin/doctors/${doctorId}`)
         revalidatePath("/admin/doctors")
         return { success: true }
-    } catch (error: any) {
-        console.error("Unexpected error in toggleDoctorVerifiedStatus:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in toggleDoctorVerifiedStatus:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -496,9 +514,10 @@ export async function getSpecializations() {
         }
 
         return { success: true, specializations: data }
-    } catch (error: any) {
-        console.error("Unexpected error in getSpecializations:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in getSpecializations:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -534,9 +553,10 @@ export async function addDoctorEducation(
 
         revalidatePath(`/admin/doctors/${doctorId}`)
         return { success: true, educationId: data.id }
-    } catch (error: any) {
-        console.error("Unexpected error in addDoctorEducation:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in addDoctorEducation:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -554,9 +574,10 @@ export async function deleteDoctorEducation(educationId: string, doctorId: strin
 
         revalidatePath(`/admin/doctors/${doctorId}`)
         return { success: true }
-    } catch (error: any) {
-        console.error("Unexpected error in deleteDoctorEducation:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in deleteDoctorEducation:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -594,9 +615,10 @@ export async function addDoctorCertification(
 
         revalidatePath(`/admin/doctors/${doctorId}`)
         return { success: true, certificationId: data.id }
-    } catch (error: any) {
-        console.error("Unexpected error in addDoctorCertification:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in addDoctorCertification:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -614,9 +636,10 @@ export async function deleteDoctorCertification(certificationId: string, doctorI
 
         revalidatePath(`/admin/doctors/${doctorId}`)
         return { success: true }
-    } catch (error: any) {
-        console.error("Unexpected error in deleteDoctorCertification:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in deleteDoctorCertification:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -650,9 +673,10 @@ export async function addDoctorAvailability(
 
         revalidatePath(`/admin/doctors/${doctorId}`)
         return { success: true, availabilityId: data.id }
-    } catch (error: any) {
-        console.error("Unexpected error in addDoctorAvailability:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in addDoctorAvailability:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -670,9 +694,10 @@ export async function deleteDoctorAvailability(availabilityId: string, doctorId:
 
         revalidatePath(`/admin/doctors/${doctorId}`)
         return { success: true }
-    } catch (error: any) {
-        console.error("Unexpected error in deleteDoctorAvailability:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in deleteDoctorAvailability:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }
 
@@ -694,8 +719,9 @@ export async function getDoctorAvailability(doctorId: string) {
         }
 
         return { success: true, availability: data }
-    } catch (error: any) {
-        console.error("Unexpected error in getDoctorAvailability:", error)
-        return { success: false, error: error.message || "An unexpected error occurred" }
+    } catch (error) {
+        const err = error as Error
+        console.error("Unexpected error in getDoctorAvailability:", err)
+        return { success: false, error: err.message || "An unexpected error occurred" }
     }
 }

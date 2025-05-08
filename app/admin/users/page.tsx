@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Search, UserPlus, UserCog, UserX, MoreHorizontal } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
 import { MedicalLoader } from "@/components/ui/loader"
 import {
     DropdownMenu,
@@ -55,8 +54,6 @@ export default function UsersPage() {
     async function fetchUsers() {
         try {
             setLoading(true)
-            const supabase = createClient()
-
             // In a real application, you would fetch users from your database
             // For now, we'll simulate the data
             await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -302,7 +299,7 @@ export default function UsersPage() {
                     <DialogHeader>
                         <DialogTitle>Delete User</DialogTitle>
                         <DialogDescription>
-                            Are you sure you want to delete the user "{currentUser?.email}"? This action cannot be undone.
+                            Are you sure you want to delete the user &quot;{currentUser?.email}&quot;? This action cannot be undone.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
@@ -321,7 +318,7 @@ export default function UsersPage() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Change User Role</DialogTitle>
-                        <DialogDescription>Change the role for user "{currentUser?.email}".</DialogDescription>
+                        <DialogDescription>Change the role for user &quot;{currentUser?.email}&quot;.</DialogDescription>
                     </DialogHeader>
                     <div className="py-4">
                         <label htmlFor="role" className="text-sm font-medium leading-none mb-2 block">

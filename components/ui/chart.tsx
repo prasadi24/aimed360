@@ -5,9 +5,21 @@ import type React from "react"
 import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 
-interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
-    data: any
+interface ChartDataset {
+    data: number[]
+    backgroundColor?: string[]
+    borderColor?: string
 }
+
+interface ChartData {
+    labels: string[]
+    datasets: ChartDataset[]
+}
+
+interface ChartProps extends React.HTMLAttributes<HTMLDivElement> {
+    data: ChartData
+}
+
 
 export function BarChart({ data, className, ...props }: ChartProps) {
     const chartRef = useRef<HTMLCanvasElement>(null)
@@ -37,7 +49,7 @@ export function BarChart({ data, className, ...props }: ChartProps) {
             const y = height - barHeight - 20
 
             // Draw bar
-            ctx.fillStyle = data.datasets[0].backgroundColor[index] || "#4f46e5"
+            ctx.fillStyle = data.datasets[0].backgroundColor?.[index] ?? "#4f46e5"
             ctx.fillRect(x, y, barWidth, barHeight)
 
             // Draw label

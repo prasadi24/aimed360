@@ -22,7 +22,7 @@ export function getDisplayName(user: User): string {
 }
 
 // Function to check if user is admin using API route
-export async function checkIsAdmin(userId: string): Promise<boolean> {
+export async function checkIsAdmin(): Promise<boolean> {
     try {
         // Call our API route to check admin status
         const response = await fetch("/api/check-admin")

@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
-
+import type { User } from "@supabase/supabase-js"
 
 export type AuthError = {
     message: string
@@ -226,7 +226,7 @@ export async function checkAuthStatus(): Promise<{
     authenticated: boolean
     role: string | null
     userName: string | null
-    user: any | null
+    user: User | null
 }> {
     const supabase = await createClient()
 

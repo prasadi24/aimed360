@@ -82,13 +82,17 @@ export function AddFeatureDialog({ onFeatureAdded }: AddFeatureDialogProps) {
             setName("")
             setDescription("")
             setOpen(false)
-        } catch (error: any) {
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : "Failed to add feature"
+
             toast({
                 title: "Error",
-                description: error.message || "Failed to add feature",
+                description: errorMessage,
                 variant: "destructive",
             })
-        } finally {
+        }
+        finally {
             setIsLoading(false)
         }
     }

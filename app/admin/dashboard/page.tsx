@@ -83,7 +83,7 @@ export default function AdminDashboardPage() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight">Admin Dashboard</h2>
-                    <p className="text-muted-foreground">Overview of your healthcare platform's performance and metrics.</p>
+                    <p className="text-muted-foreground">Overview of your healthcare platform&apos;s performance and metrics.</p>
                 </div>
             </div>
 

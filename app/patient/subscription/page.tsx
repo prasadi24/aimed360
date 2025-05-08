@@ -9,6 +9,7 @@ import { checkAuthStatus } from "@/app/actions/auth"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 import { format } from "date-fns"
+import { User } from "@supabase/supabase-js"
 
 interface PlanDetails {
     name: string
@@ -35,13 +36,18 @@ interface PaymentHistory {
     method: string
 }
 
+
+
+
+
+
 export default function PatientSubscriptionPage() {
     const router = useRouter()
     const [subscription, setSubscription] = useState<Subscription | null>(null)
     const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [user, setUser] = useState<any>(null)
+    const [user, setUser] = useState<User | null>(null)
 
     useEffect(() => {
         async function fetchData() {
@@ -93,25 +99,48 @@ export default function PatientSubscriptionPage() {
                 // Type guard to ensure subscriptionData is not null
                 if (subscriptionData) {
                     // Use type assertion to bypass TypeScript's strict checking
-                    const data = subscriptionData as any
+                    type SupabaseSubscriptionRaw = {
+                        id: string
+                        plan_id: string
+                        start_date: string
+                        end_date: string | null
+                        status: string
+                        payment_status: string
+                        subscription_plans?: {
+                            name?: string
+                            description?: string
+                            price?: number
+                            billing_cycle?: string
+                        }
+                    }
+
+
+
+                    const data = subscriptionData as unknown as SupabaseSubscriptionRaw
+
+                    if (!data.subscription_plans || typeof data.subscription_plans !== "object") {
+                        throw new Error("Invalid subscription plan data")
+                    }
+
+
+
 
                     // Create the subscription object with safe defaults
                     const formattedSubscription: Subscription = {
-                        id: data.id ? String(data.id) : "",
-                        plan_id: data.plan_id ? String(data.plan_id) : "",
-                        start_date: data.start_date ? String(data.start_date) : new Date().toISOString(),
+                        id: String(data.id),
+                        plan_id: String(data.plan_id),
+                        start_date: String(data.start_date),
                         end_date: data.end_date ? String(data.end_date) : null,
-                        status: data.status ? String(data.status) : "active",
-                        payment_status: data.payment_status ? String(data.payment_status) : "pending",
+                        status: String(data.status),
+                        payment_status: String(data.payment_status),
                         plan: {
-                            name: data.subscription_plans?.name ? String(data.subscription_plans.name) : "Unknown Plan",
-                            description: data.subscription_plans?.description ? String(data.subscription_plans.description) : "",
-                            price: data.subscription_plans?.price ? Number(data.subscription_plans.price) : 0,
-                            billing_cycle: data.subscription_plans?.billing_cycle
-                                ? String(data.subscription_plans.billing_cycle)
-                                : "month",
+                            name: String(data.subscription_plans?.name ?? "Unknown Plan"),
+                            description: String(data.subscription_plans?.description ?? ""),
+                            price: Number(data.subscription_plans?.price ?? 0),
+                            billing_cycle: String(data.subscription_plans?.billing_cycle ?? "month"),
                         },
                     }
+
 
                     setSubscription(formattedSubscription)
 
@@ -124,10 +153,16 @@ export default function PatientSubscriptionPage() {
                 } else {
                     throw new Error("Invalid subscription data")
                 }
-            } catch (err: any) {
-                console.error("Error fetching subscription data:", err)
-                setError(err.message || "An error occurred while fetching your subscription data")
-            } finally {
+            } catch (err) {
+                if (err instanceof Error) {
+                    console.error("Error fetching subscription data:", err.message)
+                    setError(err.message)
+                } else {
+                    console.error("Unknown error fetching subscription data:", err)
+                    setError("An unknown error occurred.")
+                }
+            }
+            finally {
                 setLoading(false)
             }
         }
@@ -194,7 +229,7 @@ export default function PatientSubscriptionPage() {
         try {
             return format(new Date(dateString), "MMM d, yyyy")
         } catch (error) {
-            console.error("Invalid date format:", dateString)
+            console.error("Invalid date format:", dateString, error)
             return "Invalid date"
         }
     }
@@ -240,7 +275,8 @@ export default function PatientSubscriptionPage() {
                 <Card>
                     <CardHeader>
                         <CardTitle>No Active Subscription</CardTitle>
-                        <CardDescription>You don't have an active subscription plan</CardDescription>
+                        <CardDescription>You don&apos;t have an active subscription plan</CardDescription>
+
                     </CardHeader>
                     <CardContent>
                         <p className="mb-4">Subscribe to a healthcare plan to access premium features and services.</p>

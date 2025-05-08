@@ -576,7 +576,7 @@ export default function HomePage() {
                             </div>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose AIMED360</h2>
                             <p className="text-muted-foreground max-w-2xl mx-auto">
-                                We're committed to transforming healthcare delivery with technology that you can trust and that helps
+                                We&apos;re committed to transforming healthcare delivery with technology that you can trust and that helps
                                 your practice thrive.
                             </p>
                         </div>

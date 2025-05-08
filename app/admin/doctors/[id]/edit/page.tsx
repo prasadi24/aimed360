@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -20,6 +20,12 @@ interface Specialization {
     id: string
     name: string
     description?: string
+}
+
+interface DoctorSpecialization {
+    specializations: {
+        name: string
+    }
 }
 
 export default function EditDoctorPage() {
@@ -50,11 +56,7 @@ export default function EditDoctorPage() {
     const params = useParams()
     const doctorId = params.id as string
 
-    useEffect(() => {
-        fetchData()
-    }, [doctorId])
-
-    async function fetchData() {
+    const fetchData = useCallback(async () => {
         try {
             setLoading(true)
 
@@ -84,9 +86,7 @@ export default function EditDoctorPage() {
 
                 // Extract specializations
                 if (doctor.doctor_specializations && doctor.doctor_specializations.length > 0) {
-                    const specs = doctor.doctor_specializations.map(
-                        (ds: { specializations: { name: string } }) => ds.specializations.name,
-                    )
+                    const specs = doctor.doctor_specializations.map((ds: DoctorSpecialization) => ds.specializations.name)
                     setSelectedSpecializations(specs)
                 }
             } else {
@@ -117,7 +117,11 @@ export default function EditDoctorPage() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [doctorId, router])
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -167,11 +171,11 @@ export default function EditDoctorPage() {
                     variant: "destructive",
                 })
             }
-        } catch (error: any) {
+        } catch (error) {
             console.error("Error updating doctor:", error)
             toast({
                 title: "Error",
-                description: error.message || "An unexpected error occurred",
+                description: error instanceof Error ? error.message : "An unexpected error occurred",
                 variant: "destructive",
             })
         } finally {

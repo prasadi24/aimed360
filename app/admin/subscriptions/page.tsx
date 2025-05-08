@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { PlusCircle } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import { useRouter } from "next/navigation"
 import { MedicalLoader } from "@/components/ui/loader"
 
 interface SubscriptionPlan {
@@ -57,6 +56,27 @@ interface PatientSubscription {
     }
 }
 
+interface RawPlan {
+    id: string
+    name: string
+    description?: string
+    price: number
+    billing_cycle?: string
+}
+
+interface RawSubscription {
+    id: string
+    patient_id: string
+    plan_id: string
+    start_date: string
+    end_date?: string
+    status: string
+    payment_status: string
+    patients: PatientData
+    subscription_plans: PlanData
+}
+
+
 export default function SubscriptionsPage() {
     const [plans, setPlans] = useState<SubscriptionPlan[]>([])
     const [subscriptions, setSubscriptions] = useState<PatientSubscription[]>([])
@@ -78,7 +98,7 @@ export default function SubscriptionsPage() {
         price: 0,
         billing_cycle: "month",
     })
-    const router = useRouter()
+    // const router = useRouter()
 
     useEffect(() => {
         fetchData()
@@ -95,36 +115,43 @@ export default function SubscriptionsPage() {
                 .select("*")
                 .order("price")
 
-            if (plansError) {
+            if (plansError || !plansData) {
                 console.error("Error fetching plans:", plansError)
                 return
             }
 
-            // Fetch recent subscriptions with patient info
+            // Fetch subscriptions with inner joins on patient and plan
             const { data: subscriptionsData, error: subscriptionsError } = await supabase
                 .from("patient_subscriptions")
                 .select(`
-          id,
-          patient_id,
-          plan_id,
-          start_date,
-          end_date,
-          status,
-          payment_status,
-          patients!inner(first_name, last_name, email),
-          subscription_plans!inner(name, price)
-        `)
+                    id,
+                    patient_id,
+                    plan_id,
+                    start_date,
+                    end_date,
+                    status,
+                    payment_status,
+                    patients!inner(first_name, last_name, email),
+                    subscription_plans!inner(name, price)
+                `)
                 .order("start_date", { ascending: false })
                 .limit(10)
 
-            if (subscriptionsError) {
+            if (subscriptionsError || !subscriptionsData) {
                 console.error("Error fetching subscriptions:", subscriptionsError)
+                return
             }
 
-            // Calculate active subscribers per plan
-            const plansWithStats: SubscriptionPlan[] = (plansData || []).map((plan: any) => {
-                const activeSubscribers =
-                    subscriptionsData?.filter((sub: any) => sub.plan_id === plan.id && sub.status === "active").length || 0
+            // Type assertions for known data structure
+            const typedPlans = plansData as unknown as RawPlan[]
+            const typedSubscriptions = subscriptionsData as unknown as RawSubscription[]
+
+
+            // Process plans with active subscriber counts
+            const plansWithStats: SubscriptionPlan[] = typedPlans.map((plan: RawPlan) => {
+                const activeSubscribers = typedSubscriptions.filter((sub: RawSubscription) =>
+                    sub.plan_id === plan.id && sub.status === "active"
+                ).length || 0
 
                 return {
                     id: plan.id,
@@ -139,7 +166,7 @@ export default function SubscriptionsPage() {
             setPlans(plansWithStats)
 
             // Format subscriptions for display
-            const formattedSubscriptions: PatientSubscription[] = (subscriptionsData || []).map((sub: any) => ({
+            const formattedSubscriptions: PatientSubscription[] = typedSubscriptions.map((sub: RawSubscription) => ({
                 id: sub.id,
                 patient_id: sub.patient_id,
                 plan_id: sub.plan_id,
@@ -162,6 +189,8 @@ export default function SubscriptionsPage() {
             setLoading(false)
         }
     }
+
+
 
     function getStatusColor(status: string) {
         switch (status.toLowerCase()) {
@@ -210,9 +239,14 @@ export default function SubscriptionsPage() {
             setPlans(plans.map((plan) => (plan.id === currentPlan.id ? { ...plan, ...editForm } : plan)))
             setEditDialogOpen(false)
             fetchData() // Refresh data
-        } catch (error: any) {
-            console.error("Error updating plan:", error)
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error("Error updating plan:", error.message)
+            } else {
+                console.error("Unknown error updating plan:", error)
+            }
         }
+
     }
 
     const handleAddPlan = () => {
@@ -233,7 +267,7 @@ export default function SubscriptionsPage() {
 
         try {
             const supabase = createClient()
-            const { data, error } = await supabase
+            const { error } = await supabase
                 .from("subscription_plans")
                 .insert({
                     name: addForm.name,
@@ -247,9 +281,10 @@ export default function SubscriptionsPage() {
 
             setAddDialogOpen(false)
             fetchData() // Refresh data
-        } catch (error: any) {
-            console.error("Error adding plan:", error)
+        } catch (error) {
+            console.error("Error adding plan:", error instanceof Error ? error.message : error)
         }
+
     }
 
     const handleDeleteClick = (planId: string) => {
@@ -284,9 +319,14 @@ export default function SubscriptionsPage() {
 
             // Update local state
             setPlans(plans.filter((plan) => plan.id !== planToDelete))
-        } catch (error: any) {
-            console.error("Error deleting plan:", error)
-        } finally {
+        } catch (error) {
+            if (error instanceof Error) {
+                console.error("Error deleting plan:", error.message)
+            } else {
+                console.error("Unknown error deleting plan:", error)
+            }
+        }
+        finally {
             setDeleteDialogOpen(false)
             setPlanToDelete(null)
         }
@@ -298,13 +338,13 @@ export default function SubscriptionsPage() {
     const activeSubscribersCount = planBeingDeleted ? planBeingDeleted.active_subscribers : 0
 
     // Format price in Indian Rupees
-    const formatPrice = (price: number) => {
-        return new Intl.NumberFormat("en-IN", {
-            style: "currency",
-            currency: "INR",
-            maximumFractionDigits: 0,
-        }).format(price)
-    }
+    // const formatPrice = (price: number) => {
+    //     return new Intl.NumberFormat("en-IN", {
+    //         style: "currency",
+    //         currency: "INR",
+    //         maximumFractionDigits: 0,
+    //     }).format(price)
+    // }
 
     if (loading) {
         return (

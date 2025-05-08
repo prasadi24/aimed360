@@ -78,8 +78,13 @@ export default function SubscriptionsPage() {
                                         item.subscription_features &&
                                         typeof item.subscription_features === "object"
                                     ) {
-                                        const featureData = item.subscription_features as any
-
+                                        const featureData = item.subscription_features as Feature
+                                        // Ensure featureData is an object and has the expected properties
+                                        if (!featureData || typeof featureData !== "object") {
+                                            console.error("Invalid feature data:", featureData)
+                                            continue
+                                        }
+                                        // Create a feature object with default values
                                         const feature: Feature = {
                                             id: String(featureData.id || ""),
                                             name: String(featureData.name || ""),

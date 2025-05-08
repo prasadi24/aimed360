@@ -77,14 +77,14 @@ export function MultiSelect({ value, onValueChange, placeholder = "Select items"
                         <CommandGroup className="h-full overflow-auto">
                             {React.Children.map(children, (child) => {
                                 if (React.isValidElement(child)) {
-                                    return React.cloneElement(child as React.ReactElement<any>, {
+                                    return React.cloneElement(child as React.ReactElement<MultiSelectItemProps>, {
                                         onSelect: (selectedValue: string) => {
                                             setInputValue("")
                                             if (!value.includes(selectedValue)) {
                                                 onValueChange([...value, selectedValue])
                                             }
                                         },
-                                        className: value.includes((child as React.ReactElement<any>).props.value)
+                                        className: value.includes((child as React.ReactElement<MultiSelectItemProps>).props.value)
                                             ? "bg-accent text-accent-foreground"
                                             : undefined,
                                     })

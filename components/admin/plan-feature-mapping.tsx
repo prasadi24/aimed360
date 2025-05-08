@@ -112,13 +112,17 @@ export function PlanFeatureMapping({ plans, features, mappings }: PlanFeatureMap
                 title: "Success",
                 description: "All plan features updated successfully",
             })
-        } catch (error: any) {
+        } catch (error) {
+            const errorMessage =
+                error instanceof Error ? error.message : "Failed to update plan features"
+
             toast({
                 title: "Error",
-                description: error.message || "Failed to update plan features",
+                description: errorMessage,
                 variant: "destructive",
             })
-        } finally {
+        }
+        finally {
             setIsLoading(false)
         }
     }

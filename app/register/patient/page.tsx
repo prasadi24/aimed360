@@ -132,10 +132,16 @@ export default function PatientRegistrationPage() {
                     router.push("/login")
                 }, 3000)
             }
-        } catch (err: any) {
-            console.error("Registration error:", err)
-            setError(err.message || "An unexpected error occurred. Please try again.")
-        } finally {
+        } catch (err) {
+            if (err instanceof Error) {
+                console.error("Registration error:", err.message)
+                setError(err.message)
+            } else {
+                console.error("Unknown registration error:", err)
+                setError("An unexpected error occurred. Please try again.")
+            }
+        }
+        finally {
             setLoading(false)
         }
     }

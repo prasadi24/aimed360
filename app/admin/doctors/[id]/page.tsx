@@ -1,10 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import Image from "next/image"
 import {
     ArrowLeft,
     Edit,
@@ -132,15 +133,10 @@ export default function DoctorDetailPage() {
     const params = useParams()
     const doctorId = params.id as string
 
-    useEffect(() => {
-        fetchDoctorData()
-    }, [doctorId])
-
-    async function fetchDoctorData() {
+    const fetchDoctorData = useCallback(async () => {
         try {
             setLoading(true)
 
-            // Fetch doctor details
             const doctorResult = await getDoctor(doctorId)
             if (doctorResult.success && doctorResult.doctor) {
                 setDoctor(doctorResult.doctor)
@@ -148,7 +144,6 @@ export default function DoctorDetailPage() {
                 console.error("Failed to fetch doctor:", doctorResult.error)
             }
 
-            // Fetch doctor availability
             const availabilityResult = await getDoctorAvailability(doctorId)
             if (availabilityResult.success && availabilityResult.availability) {
                 setAvailability(availabilityResult.availability)
@@ -160,7 +155,46 @@ export default function DoctorDetailPage() {
         } finally {
             setLoading(false)
         }
-    }
+    }, [doctorId])
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         await fetchDoctorData()
+    //     }
+    //     fetchData()
+    // }, [doctorId])
+
+    useEffect(() => {
+        fetchDoctorData()
+    }, [fetchDoctorData])
+
+
+
+    // async function fetchDoctorData() {
+    //     try {
+    //         setLoading(true)
+
+    //         // Fetch doctor details
+    //         const doctorResult = await getDoctor(doctorId)
+    //         if (doctorResult.success && doctorResult.doctor) {
+    //             setDoctor(doctorResult.doctor)
+    //         } else {
+    //             console.error("Failed to fetch doctor:", doctorResult.error)
+    //         }
+
+    //         // Fetch doctor availability
+    //         const availabilityResult = await getDoctorAvailability(doctorId)
+    //         if (availabilityResult.success && availabilityResult.availability) {
+    //             setAvailability(availabilityResult.availability)
+    //         } else {
+    //             console.error("Failed to fetch availability:", availabilityResult.error)
+    //         }
+    //     } catch (error) {
+    //         console.error("Error fetching doctor data:", error)
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
 
     const handleAddEducation = async () => {
         try {
@@ -315,9 +349,11 @@ export default function DoctorDetailPage() {
                         <div className="flex flex-col items-center mb-6">
                             <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center mb-4">
                                 {doctor.profile_image ? (
-                                    <img
+                                    <Image
                                         src={doctor.profile_image || "/placeholder.svg"}
                                         alt={`${doctor.first_name} ${doctor.last_name}`}
+                                        width={128}
+                                        height={128}
                                         className="w-full h-full rounded-full object-cover"
                                     />
                                 ) : (

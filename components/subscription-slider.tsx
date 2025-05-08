@@ -23,8 +23,15 @@ interface Plan {
     features: Feature[]
 }
 
-// Define types for Supabase responses
-interface FeatureData {
+type AIMed360Plan = {
+    id: string
+    name: string
+    description: string
+    price: number
+    billing_cycle: string
+}
+
+type AIMed360FeatureJoin = {
     feature_id: string
     subscription_features: {
         id: string
@@ -44,7 +51,6 @@ export function SubscriptionSlider() {
             try {
                 const supabase = createClient()
 
-                // Fetch all plans
                 const { data: plansData, error: plansError } = await supabase
                     .from("subscription_plans")
                     .select("*")
@@ -53,16 +59,16 @@ export function SubscriptionSlider() {
                 if (plansError) throw plansError
                 if (!plansData || !Array.isArray(plansData)) throw new Error("No plans data returned")
 
-                // For each plan, fetch its top 3 features
                 const plansWithFeatures = await Promise.all(
-                    plansData.map(async (plan: any) => {
+                    (plansData as AIMed360Plan[]).map(async (plan) => {
+
                         try {
                             const { data: featuresData, error: featuresError } = await supabase
                                 .from("plan_features")
                                 .select(`
-                  feature_id,
-                  subscription_features!inner(id, name, description)
-                `)
+                                    feature_id,
+                                    subscription_features!inner(id, name, description)
+                                `)
                                 .eq("plan_id", plan.id)
                                 .limit(3)
 
@@ -71,40 +77,40 @@ export function SubscriptionSlider() {
                             const features: Feature[] = []
 
                             if (featuresData && Array.isArray(featuresData)) {
-                                // Type assertion for featuresData
-                                const typedFeaturesData = featuresData as any[]
+                                const typedFeaturesData = featuresData as unknown as AIMed360FeatureJoin[]
+
 
                                 for (const item of typedFeaturesData) {
                                     if (item && item.subscription_features) {
                                         features.push({
-                                            id: String(item.subscription_features.id || ""),
-                                            name: String(item.subscription_features.name || ""),
-                                            description: String(item.subscription_features.description || ""),
+                                            id: String(item.subscription_features.id ?? ""),
+                                            name: String(item.subscription_features.name ?? ""),
+                                            description: String(item.subscription_features.description ?? ""),
                                         })
                                     }
                                 }
                             }
 
                             return {
-                                id: String(plan.id || ""),
-                                name: String(plan.name || ""),
-                                description: String(plan.description || ""),
-                                price: Number(plan.price || 0),
-                                billing_cycle: String(plan.billing_cycle || "month"),
+                                id: String(plan.id),
+                                name: String(plan.name),
+                                description: String(plan.description),
+                                price: Number(plan.price),
+                                billing_cycle: String(plan.billing_cycle),
                                 features,
-                            } as Plan
+                            }
                         } catch (error) {
                             console.error(`Error fetching features for plan ${plan.id}:`, error)
                             return {
-                                id: String(plan.id || ""),
-                                name: String(plan.name || ""),
-                                description: String(plan.description || ""),
-                                price: Number(plan.price || 0),
-                                billing_cycle: String(plan.billing_cycle || "month"),
+                                id: String(plan.id),
+                                name: String(plan.name),
+                                description: String(plan.description),
+                                price: Number(plan.price),
+                                billing_cycle: String(plan.billing_cycle),
                                 features: [],
-                            } as Plan
+                            }
                         }
-                    }),
+                    })
                 )
 
                 setPlans(plansWithFeatures)
@@ -130,12 +136,10 @@ export function SubscriptionSlider() {
     const visiblePlans = () => {
         if (plans.length === 0) return []
 
-        // For mobile, show only the current plan
         if (typeof window !== "undefined" && window.innerWidth < 768) {
             return [plans[currentIndex]]
         }
 
-        // For desktop, show 3 plans at a time
         const result = []
         for (let i = 0; i < 3; i++) {
             const index = (currentIndex + i) % plans.length
@@ -144,7 +148,6 @@ export function SubscriptionSlider() {
         return result
     }
 
-    // Format price in Indian Rupees
     const formatPrice = (price: number) => {
         return new Intl.NumberFormat("en-IN", {
             style: "currency",

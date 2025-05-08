@@ -4,7 +4,7 @@ import Link from "next/link"
 import { ShieldCheck } from "lucide-react"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-    const { authenticated, user, role } = await checkAuthStatus()
+    const { role } = await checkAuthStatus()
 
     return (
         <div className="min-h-screen flex flex-col">

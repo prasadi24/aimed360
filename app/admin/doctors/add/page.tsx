@@ -134,14 +134,16 @@ export default function AddDoctorPage() {
                     variant: "destructive",
                 })
             }
-        } catch (error: any) {
-            console.error("Error creating doctor:", error)
+        } catch (error) {
+            const err = error as Error
+            console.error("Error creating doctor:", err)
             toast({
                 title: "Error",
-                description: error.message || "An unexpected error occurred",
+                description: err.message || "An unexpected error occurred",
                 variant: "destructive",
             })
-        } finally {
+        }
+        finally {
             setSubmitting(false)
         }
     }
